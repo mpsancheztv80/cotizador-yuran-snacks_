@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador YuraSnacks</title>
+    <style>
+        :root {
+            --oliva-oscuro: #3F4E36;
+            --oliva-medio: #6B7A59;
+            --arena: #EFE8D8;
+            --arena-claro: #F9F6F0;
+            --blanco: #FFFFFF;
+            --texto-oscuro: #2C3327;
+            --verde-exito: #2D5A27;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--arena-claro);
+            color: var(--texto-oscuro);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .cotizador-card {
+            background-color: var(--blanco);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(63, 78, 54, 0.12);
+            padding: 20px;
+            border: 1px solid rgba(107, 122, 89, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .header h1 {
+            color: var(--oliva-oscuro);
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: var(--oliva-medio);
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--oliva-oscuro);
+            margin-bottom: 6px;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--arena);
+            background-color: var(--blanco);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--texto-oscuro);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--oliva-medio);
+        }
+
+        .btn-calcular {
+            width: 100%;
+            background-color: var(--oliva-oscuro);
+            color: var(--blanco);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-calcular:active {
+            background-color: var(--oliva-medio);
+        }
+
+        .resumen-container {
+            display: none;
+            margin-top: 18px;
+            background-color: var(--arena);
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px dashed var(--oliva-medio);
+        }
+
+        .resumen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(107, 122, 89, 0.3);
+            padding-bottom: 6px;
+        }
+
+        .resumen-header h2 {
+            font-size: 0.95rem;
+            color: var(--oliva-oscuro);
+        }
+
+        .resumen-linea {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            margin-bottom: 6px;
+        }
+
+        .resumen-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--oliva-oscuro);
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 2px solid var(--oliva-medio);
+        }
+
+        .btn-copiar {
+            width: 100%;
+            background-color: #25D366;
+            color: var(--blanco);
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-copiar:active {
+            opacity: 0.9;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--verde-exito);
+            margin-top: 6px;
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cotizador-card">
+    <div class="header">
+        <h1>Cotizador YuraSnacks 🌿</h1>
+        <p>Calculadora de cotizaciones para WhatsApp</p>
+    </div>
+
+    <div class="form-group">
+        <label for="producto">Producto / Pack</label>
+        <select id="producto">
+            <option value="8" data-nombre="Barra Kiwicha y Cacao">Barra Kiwicha y Cacao (S/ 8.00)</option>
+            <option value="7" data-nombre="Barra Quinua Original">Barra Quinua Original (S/ 7.00)</option>
+            <option value="35" data-nombre="Pack x5 Kiwicha y Cacao">Pack x5 Kiwicha y Cacao (S/ 35.00)</option>
+            <option value="30" data-nombre="Pack x5 Quinua Original">Pack x5 Quinua Original (S/ 30.00)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="number" id="cantidad" min="1" value="1">
+    </div>
+
+    <div class="form-group">
+        <label for="canal">Canal de entrega</label>
+        <select id="canal">
+            <option value="0" data-nombre="Recojo en punto de venta">Recojo en punto de venta (Sin costo)</option>
+            <option value="5" data-nombre="Delivery en Lima">Delivery en Lima (+ S/ 5.00)</option>
+        </select>
+    </div>
+
+    <button class="btn-calcular" onclick="calcularCotizacion()">Calcular Total</button>
+
+    <div class="resumen-container" id="resumenBox">
+        <div class="resumen-header">
+            <h2>Resumen del Pedido</h2>
+        </div>
+        <div class="resumen-linea">
+            <span id="resProducto">--</span>
+            <span id="resSubtotal">S/ 0.00</span>
+        </div>
+        <div class="resumen-linea">
+            <span>Entrega: <span id="resCanal">--</span></span>
+            <span id="resEnvio">S/ 0.00</span>
+        </div>
+        <div class="resumen-total">
+            <span>TOTAL:</span>
+            <span id="resTotal">S/ 0.00</span>
+        </div>
+
+        <button class="btn-copiar" onclick="copiarResumen()">
+            Copiar resumen para WhatsApp
+        </button>
+        <div class="feedback" id="feedbackMsg">¡Copiado al portapapeles! Listo para pegar.</div>
+    </div>
+</div>
+
+<script>
+    let mensajeWhatsApp = "";
+
+    function calcularCotizacion() {
+        const selectProd = document.getElementById("producto");
+        const precioUnitario = parseFloat(selectProd.value);
+        const nombreProducto = selectProd.options[selectProd.selectedIndex].getAttribute("data-nombre");
+
+        const cantidad = parseInt(document.getElementById("cantidad").value) || 1;
+        if (cantidad < 1) {
+            alert("La cantidad mínima es 1.");
+            return;
+        }
+
+        const selectCanal = document.getElementById("canal");
+        const costoEnvio = parseFloat(selectCanal.value);
+        const nombreCanal = selectCanal.options[selectCanal.selectedIndex].getAttribute("data-nombre");
+
+        const subtotal = precioUnitario * cantidad;
+        const total = subtotal + costoEnvio;
+
+        // Actualizar UI
+        document.getElementById("resProducto").innerText = `${cantidad}x ${nombreProducto}`;
+        document.getElementById("resSubtotal").innerText = `S/ ${subtotal.toFixed(2)}`;
+        document.getElementById("resCanal").innerText = nombreCanal;
+        document.getElementById("resEnvio").innerText = costoEnvio > 0 ? `S/ ${costoEnvio.toFixed(2)}` : "GRATIS";
+        document.getElementById("resTotal").innerText = `S/ ${total.toFixed(2)}`;
+
+        // Formatear texto comercial para WhatsApp
+        mensajeWhatsApp = `*¡Hola! Aquí tienes el detalle de tu pedido YuraSnacks:* 🌿\n\n` +
+            `• *Producto:* ${cantidad}x ${nombreProducto}\n` +
+            `• *Entrega:* ${nombreCanal}\n` +
+            `• *Subtotal:* S/ ${subtotal.toFixed(2)}\n` +
+            (costoEnvio > 0 ? `• *Delivery:* S/ ${costoEnvio.toFixed(2)}\n` : `• *Envío:* Sin costo adicional\n`) +
+            `\n👉 *TOTAL A PAGAR: S/ ${total.toFixed(2)}*\n\n` +
+            `¿Deseas confirmarlo para separarte el stock? 😊`;
+
+        document.getElementById("resumenBox").style.display = "block";
+        document.getElementById("feedbackMsg").style.display = "none";
+    }
+
+    function copiarResumen() {
+        if (!mensajeWhatsApp) return;
+
+        navigator.clipboard.writeText(mensajeWhatsApp).then(() => {
+            const feedback = document.getElementById("feedbackMsg");
+            feedback.style.display = "block";
+            setTimeout(() => {
+                feedback.style.display = "none";
+            }, 3000);
+        }).catch(err => {
+            alert("No se pudo copiar automáticamente. Inténtalo de nuevo.");
+        });
+    }
+</script>
+
+</body>
+</html>
